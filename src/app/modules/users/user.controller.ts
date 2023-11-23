@@ -73,7 +73,10 @@ const updateUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const { user: updatedUserData } = req.body;
-        const result = await UserServices.updateStudentFromDB(userId, updatedUserData);
+
+        const zodParsedData = UserValidationSchema.parse(updatedUserData);
+
+        const result = await UserServices.updateStudentFromDB(userId, zodParsedData);
         // console.log(result);
         if (result.modifiedCount) {
             res.status(200).json({
@@ -109,9 +112,6 @@ const deleteUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
         const result = await UserServices.deleteStudentFromDB(userId);
 
-        // if (!result) {
-        //     throw new Error("User not found");
-        // }
         if (result.deletedCount) {
             res.status(200).json({
                 success: true,
