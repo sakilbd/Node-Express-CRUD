@@ -10,6 +10,7 @@ const createUser = async (req: Request, res: Response) => {
 
 
         const result = await UserServices.createUserIntoDB(zodParsedData);
+        // console.log(result);
         res.status(200).json({
             success: true,
             message: "User created successfully!",
