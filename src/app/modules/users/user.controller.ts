@@ -69,9 +69,42 @@ const getSingleUser = async (req: Request, res: Response) => {
     }
 }
 
+const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await UserServices.deleteStudentFromDB(userId);
+
+        // if (!result) {
+        //     throw new Error("User not found");
+        // }
+        if (result.deletedCount) {
+            res.status(200).json({
+                success: true,
+                message: "User deleted successfully!",
+                data: null,
+            })
+        }
+        else {
+            throw new Error("User not found")
+        }
+
+
+    }
+    catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: {
+                code: 404,
+                description: err.message
+            },
+        })
+    }
+}
 
 export const UserControllers = {
     createUser,
     getAllUsers,
     getSingleUser,
+    deleteUser,
 }
