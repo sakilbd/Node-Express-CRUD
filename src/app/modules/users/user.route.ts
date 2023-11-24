@@ -11,6 +11,8 @@ router.put('/users/:userId', UserControllers.updateUser);
 router.delete('/users/:userId', UserControllers.deleteUser);
 router.put('/users/:userId/orders', UserControllers.createOrder);
 router.get('/users/:userId/orders', UserControllers.retrieveAllOrderOfSpecificUser);
+router.get('/users/:userId/orders/total-price', UserControllers.calculateTotalPriceOfOrders);
+
 
 
 
