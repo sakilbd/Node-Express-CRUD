@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserServices } from "./user.service";
 import UserValidationSchema from "./user.zod.validation";
-
+import { UserModel } from "../user.model";
 
 const createUser = async (req: Request, res: Response) => {
     try {
@@ -138,10 +138,78 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 }
 
+const createOrder = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const { order } = req.body;
+        const user = await UserModel.findOne({ userId: userId });
+
+        if (!user) {
+            throw new Error("User not found")
+        }
+
+        user.orders?.push(order);
+        await user.save();
+
+
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully!",
+            data: null,
+        })
+    }
+    catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: {
+                code: 404,
+                description: err.message
+            },
+        })
+    }
+
+}
+const retrieveAllOrderOfSpecificUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const user = await UserModel.findOne({ userId: userId });
+
+        if (!user) {
+            throw new Error("User not found")
+        }
+
+
+
+
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: {
+                orders: user?.orders
+            },
+        })
+    }
+    catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: {
+                code: 404,
+                description: err.message
+            },
+        })
+    }
+
+}
+
+
 export const UserControllers = {
     createUser,
     getAllUsers,
     getSingleUser,
     updateUser,
     deleteUser,
+    createOrder,
+    retrieveAllOrderOfSpecificUser
 }

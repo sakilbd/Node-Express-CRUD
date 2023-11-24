@@ -1,5 +1,7 @@
 import { UserModel } from "../user.model";
 import { TUser } from "./user.interface";
+import { Order } from "./user.interface";
+
 
 const createUserIntoDB = async (userData: TUser) => {
     const result = await UserModel.create(userData);
@@ -28,10 +30,14 @@ const deleteStudentFromDB = async (userId: string) => {
 
 
 
+
+
+
 export const UserServices = {
     createUserIntoDB,
     getAllUsersFromDB,
     getSingleUserFromDB,
     updateStudentFromDB,
-    deleteStudentFromDB
+    deleteStudentFromDB,
+
 }
