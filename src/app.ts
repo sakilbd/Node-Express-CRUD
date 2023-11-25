@@ -10,9 +10,9 @@ app.use(cors());
 
 
 
-//api/v1/students/create-student
+
 //application routers
-app.use('/api/v1/students', StudentRouters);
+
 app.use('/api', UserRouters);
 
 
