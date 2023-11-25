@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { StudentRouters } from './app/modules/student/student.route';
 import { UserRouters } from './app/modules/users/user.route';
 const app = express();
 
