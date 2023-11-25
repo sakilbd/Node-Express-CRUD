@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserServices } from "./user.service";
-import UserValidationSchema from "./user.zod.validation";
+import UserValidationSchema, { OrderValidationSchema } from "./user.zod.validation";
 import { UserModel } from "../user.model";
 
 const createUser = async (req: Request, res: Response) => {
@@ -78,8 +78,8 @@ const updateUser = async (req: Request, res: Response) => {
         const zodParsedData = UserValidationSchema.parse(updatedUserData);
 
         const result = await UserServices.updateStudentFromDB(userId, zodParsedData);
-        // console.log(result);
-        if (result.modifiedCount) {
+        delete updatedUserData.password;
+        if (result.matchedCount) {
             res.status(200).json({
                 success: true,
                 message: "User updated successfully!",
@@ -147,8 +147,9 @@ const createOrder = async (req: Request, res: Response) => {
         if (!user) {
             throw new Error("User not found")
         }
+        const zodParsedOrderData = OrderValidationSchema.parse(order);
 
-        user.orders?.push(order);
+        user.orders?.push(zodParsedOrderData);
         await user.save();
 
 
@@ -212,8 +213,8 @@ const calculateTotalPriceOfOrders = async (req: Request, res: Response) => {
         }
 
         let totalPrice = 0;
-        user.orders?.map(item => {
-            totalPrice += item.price
+        user?.orders?.map(item => {
+            totalPrice += item.price * item.quantity;
         })
 
 

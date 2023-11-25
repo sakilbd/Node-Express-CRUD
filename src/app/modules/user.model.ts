@@ -43,6 +43,23 @@ userSchema.post("save", function (doc, next) {
 })
 
 
+//to encrypt password in update
+userSchema.pre("updateOne", async function (next) {
+
+    const update = this.getUpdate().$set;
+    update.password = await bycrypt.hash(update.password, Number(config.bcrypt_salt_rounds))
+    next();
+})
+
+
+
+
+
+
+
+
+
+
 userSchema.methods.toJSON = function () {
     const userObject = this.toObject();
     delete userObject.password; // Remove password from the JSON object
